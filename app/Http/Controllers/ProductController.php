@@ -29,6 +29,10 @@ class ProductController extends Controller
 
     public function store(ProductFormResquest $request)
     {
+
+        $imageName = time().'.'.$request->image->getClientOriginalExtension();
+        $request->image->move('images', $imageName);
+
         $dataForm = $request->all();
 
         $insert =  $this->product->create($dataForm);
@@ -85,17 +89,5 @@ class ProductController extends Controller
         return view ('products.index');
     }
 
-    public function uploadPost(Request $request)
-    {
-        $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
-        $imageName = time().'.'.$request->image->getClientOriginalExtension();
-        $request->image->move('public/images', $imageName);
-
-        return back()
-            ->with('success','Image Uploaded successfully.')
-            ->with('path',$imageName);
-    }
 }

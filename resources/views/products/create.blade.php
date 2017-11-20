@@ -15,9 +15,9 @@
     @endif
 
     @if(isset($product))
-        {!! Form::model($product, ['route' => ['products.update', $product->id], 'class' => 'form', 'method' => 'put']) !!}
+        {!! Form::model($product, ['route' => ['products.update', $product->id], 'class' => 'form', 'enctype'=>'multipart/form-data', 'method' => 'put']) !!}
     @else
-        {!! Form::open(['route' => 'products.store', 'class' => 'form'])!!}
+        {!! Form::open(['route' => 'products.store', 'class' => 'form', 'enctype'=>'multipart/form-data'])!!}
     @endif
 
 
@@ -37,19 +37,11 @@
             {!! Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => 'Description']) !!}
         </div>
 
-         <form action="{{'ProductController@uploadPost'}}" enctype="multipart/form-data" method="POST">
-            {{ csrf_field() }}
-            <div class="row">
-                <div class="col-md-12">
-                    <input type="file" name="image" />
-                </div>
+        <div class="form-group">
+            <input type="file" name="image" />
+        </div>
 
-                <div>
-                    <a href="{{route('products.index')}}" class="btn btn-primary">Back</a>
-                    {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
-                </div>
-            </div>
-            </div>
-    </form>
+        <a href="{{route('products.index')}}" class="btn btn-primary">Back</a>
+        {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
 
 @endsection
