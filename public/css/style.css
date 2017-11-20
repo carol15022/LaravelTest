@@ -1,0 +1,17 @@
+.title-pg {
+    font-size: 2em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.actions{
+    align-items: center;
+}
+
+.btn-add{
+margin-bottom: 10px;
+}
+
+.sideButton{
+    float:left;
+}
