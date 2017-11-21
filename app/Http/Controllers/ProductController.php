@@ -29,11 +29,16 @@ class ProductController extends Controller
 
     public function store(ProductFormResquest $request)
     {
-
-        $imageName = time().'.'.$request->image->getClientOriginalExtension();
+        /*Save the image in the directory /images*/
+        /*$imageName = time().'.'.$request->image->getClientOriginalExtension();*/
+        $imageName = $request->image->getClientOriginalName();
         $request->image->move('images', $imageName);
 
-        $dataForm = $request->all();
+        $dataForm = $request->except('image');
+
+        /*Save the image url on the form*/
+        $urlImage = '/images/'.$imageName;
+        $dataForm['image'] = $urlImage;
 
         $insert =  $this->product->create($dataForm);
 
@@ -60,8 +65,22 @@ class ProductController extends Controller
     public function update(ProductFormResquest $request, $id)
     {
         $dataForm = $request->all();
-
         $product = $this->product->find($id);
+        $productImage = $product['image'];
+
+        /*Verifies that the image file has changed*/
+        if(($_FILES['image']['name']) == "")
+            $urlDataFormImage = $productImage;
+        else{
+            $dataFormImage = $request->image->getClientOriginalName();
+            $urlDataFormImage = '/images/' . $dataFormImage;
+        }
+
+        /*Save the image url on the form*/
+        if($urlDataFormImage == $productImage)
+            $dataForm['image'] = $productImage;
+        else
+            $dataForm['image'] = $urlDataFormImage;
 
         $update = $product->update($dataForm);
 
