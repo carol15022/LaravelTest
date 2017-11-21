@@ -21,8 +21,10 @@ class CreateProductsTable extends Migration
             $table->text('image', 200);
             $table->text('description');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
+
 
     /**
      * Reverse the migrations.
