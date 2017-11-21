@@ -10,6 +10,7 @@
 
 <table class="table table-striped">
     <tr>
+        <th>Image</th>
         <th>Title</th>
         <th>Category</th>
         <th>Price</th>
@@ -19,6 +20,7 @@
 
     @foreach($products as $product)
         <tr>
+            <td><img src="{{ $product->image}}"></td>
             <td>{{$product->name}}</td>
             <td>{{$product->category}}</td>
             <td>{{$product->price}}</td>

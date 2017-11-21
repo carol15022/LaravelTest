@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductFormResquest;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ProductController extends Controller
 {
@@ -29,15 +30,17 @@ class ProductController extends Controller
 
     public function store(ProductFormResquest $request)
     {
-        /*Save the image in the directory /images*/
-        /*$imageName = time().'.'.$request->image->getClientOriginalExtension();*/
+        $image = $request->file('image');
+        $this->resize($image);
+
         $imageName = $request->image->getClientOriginalName();
-        $request->image->move('images', $imageName);
 
         $dataForm = $request->except('image');
 
+
         /*Save the image url on the form*/
         $urlImage = '/images/'.$imageName;
+
         $dataForm['image'] = $urlImage;
 
         $insert =  $this->product->create($dataForm);
@@ -74,6 +77,8 @@ class ProductController extends Controller
         else{
             $dataFormImage = $request->image->getClientOriginalName();
             $urlDataFormImage = '/images/' . $dataFormImage;
+            $image = $request->file('image');
+            $this->resize($image);
         }
 
         /*Save the image url on the form*/
@@ -101,11 +106,32 @@ class ProductController extends Controller
             return redirect()->route('products.index');
         else
             return redirect()->route('products.index')->with(['errors' => 'Failed to Delete']);
+
     }
 
-    public function upload()
+    private function resize($image)
     {
-        return view ('products.index');
+        try
+        {
+            $extension 		= 	$image->getClientOriginalExtension();
+            $imageRealPath 	= 	$image->getRealPath();
+            $thumbName 		= 	$image->getClientOriginalName();
+            $size = "60";
+
+            //$imageManager = new ImageManager(); // use this if you don't want facade style code
+            //$img = $imageManager->make($imageRealPath);
+
+            $img = Image::make($imageRealPath); // use this if you want facade style code
+            $img->resize(intval($size), null, function($constraint) {
+                $constraint->aspectRatio();
+            });
+            return $img->save(public_path('images'). '/'. $thumbName);
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+
     }
 
 
