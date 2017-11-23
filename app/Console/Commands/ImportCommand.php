@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\ConfirmationEmail;
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 
 class ImportCommand extends Command
 {
@@ -64,6 +66,8 @@ class ImportCommand extends Command
             }
             File::delete($file);
         }
+        if($files != [])
+            Mail::to('user@example.com')->send(new ConfirmationEmail());
 
 
     }
