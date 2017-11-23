@@ -184,6 +184,9 @@ return [
         //Image
         Intervention\Image\ImageServiceProvider::class,
 
+        //CSV
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
     ],
 
     /*
@@ -239,6 +242,9 @@ return [
 
         //Image
         'Image' => Intervention\Image\Facades\Image::class,
+
+        //CSV
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

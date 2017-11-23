@@ -18,8 +18,11 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->product->all();
+
         $title = 'Products Listing';
         return view('products.index', compact('products', 'title'));
+
+
     }
 
     public function create()
@@ -38,7 +41,7 @@ class ProductController extends Controller
         $dataForm = $request->except('image');
 
 
-        /*Save the image url on the form*/
+        //Save the image url on the form
         $urlImage = '/images/'.$imageName;
 
         $dataForm['image'] = $urlImage;
@@ -49,6 +52,7 @@ class ProductController extends Controller
             return redirect()->route('products.index');
         else
             return redirect()->route('products.create');
+
     }
 
     public function show($id)
@@ -111,28 +115,27 @@ class ProductController extends Controller
 
     private function resize($image)
     {
-        try
-        {
-            $extension 		= 	$image->getClientOriginalExtension();
-            $imageRealPath 	= 	$image->getRealPath();
-            $thumbName 		= 	$image->getClientOriginalName();
+        try {
+            $extension = $image->getClientOriginalExtension();
+            $imageRealPath = $image->getRealPath();
+            $thumbName = $image->getClientOriginalName();
             $size = "60";
 
-            //$imageManager = new ImageManager(); // use this if you don't want facade style code
-            //$img = $imageManager->make($imageRealPath);
-
-            $img = Image::make($imageRealPath); // use this if you want facade style code
-            $img->resize(intval($size), null, function($constraint) {
+            $img = Image::make($imageRealPath);
+            $img->resize(intval($size), null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            return $img->save(public_path('images'). '/'. $thumbName);
+
+            if (File::exists('/public/images') == false) {
+                $path = public_path('images');
+                File::makeDirectory($path, 0777, true, true);
+            }
+
+            return $img->save(public_path('images') . '/' . $thumbName);
         }
-        catch(Exception $e)
-        {
+
+        catch(Exception $e) {
             return false;
         }
-
     }
-
-
 }

@@ -8,6 +8,11 @@
     Create
 </a>
 
+<a href="/import" class="btn btn-primary btn-add">
+    <span class="glyphicon glyphicon-plus"></span>
+    Import CSV
+</a>
+
 <table class="table table-striped">
     <tr>
         <th>Image</th>
